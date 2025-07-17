@@ -95,6 +95,9 @@ class NoticeScreen extends MusicBeatState
 			
 			FlxTween.tween(screen, {y: screen.y + 20}, 1, {ease: FlxEase.circInOut, type: PINGPONG});
 			FlxTween.tween(screen, {angle: 3}, 2, {ease: FlxEase.backInOut, type: PINGPONG});
+			
+			addTouchPad("NONE", "A");
+		    addTouchPadCamera();
 		}
 		else
 			MusicBeatState.switchState(new menus.TitleState());
@@ -108,7 +111,7 @@ class NoticeScreen extends MusicBeatState
 			mmtw.volume += elapsed * .01;
 		}
 		
-		if (FlxG.keys.justPressed.ENTER){
+		if (FlxG.keys.justPressed.ENTER || (touchPad.buttonA.justPressed && touchPad != null)){
 			mmtw.destroy();
 			FlxG.sound.play(Paths.sound('resumeSong'));
 			FlxTween.tween(FlxG.camera, {zoom: 0.5, angle: 45}, 0.5, {ease: FlxEase.quadIn});
