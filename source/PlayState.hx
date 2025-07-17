@@ -4685,8 +4685,6 @@ var cameraTwn:FlxTween;
 				spr.playAnim('pressed');
 				spr.resetAnim = 0;
 			}
-			callOnLuas('onKeyPress', [buttonCode]);
-			callOnLuas('onButtonPress', [buttonCode]);
 		}
 	}
 
@@ -4705,8 +4703,6 @@ var cameraTwn:FlxTween;
 				spr.playAnim('static');
 				spr.resetAnim = 0;
 			}
-			callOnLuas('onKeyRelease', [buttonCode]);
-			callOnLuas('onButtonRelease', [buttonCode]);
 		}
 	}
 	
