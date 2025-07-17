@@ -29,6 +29,9 @@ class WarningSubState extends MusicBeatState
 		popup.updateHitbox();
 		popup.screenCenter();
 		add(popup);
+		
+		addTouchPad("NONE", "A");
+		addTouchPadCamera();
 	}
 
 	override function update(elapsed:Float)

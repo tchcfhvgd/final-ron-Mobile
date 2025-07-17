@@ -76,6 +76,8 @@ class CreditMenu extends MusicBeatState {
 		add(dividingBar);
 		super.create();
 
+		addTouchPad("UP_DOWN", "A_B");
+		
 		changeSelection(0);
 	}
 	var keyCount:Int = 0;

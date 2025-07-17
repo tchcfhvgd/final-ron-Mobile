@@ -46,6 +46,10 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		trace(cameras);
+		
+		addTouchPad("UP_DOWN", "A");
+		addTouchPadCamera();
+		
 		super.create();
 	}
 	override function update(elapsed:Float) {

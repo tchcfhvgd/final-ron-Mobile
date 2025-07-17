@@ -171,7 +171,12 @@ class DialogueBoxDave extends FlxSpriteGroup
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ANY  && dialogueStarted)
+		var justTouched:Bool = false;
+		for (touch in FlxG.touches.list)
+			if (touch.justPressed)
+				justTouched = true;
+		
+		if ((FlxG.keys.justPressed.ANY || justTouched)  && dialogueStarted)
 		{
 			remove(dialogue);
 			FlxG.sound.play(Paths.sound('textclickmodern'), 0.8);

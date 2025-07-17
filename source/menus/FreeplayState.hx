@@ -300,12 +300,20 @@ class FreeplayState extends MusicBeatState
 		var modeText = new FlxText(10, 10, 0, FreeplayState.mode.toUpperCase(), 48);
 		modeText.setFormat(Paths.font("w95.otf"), 48, FlxColor.WHITE, LEFT);
 		add(modeText);
+		
+		addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
+		addTouchPadCamera();
+		
 		super.create();
 
 	}
 
 	override function closeSubState() {
 		changeSelection(0, false);
+		persistentUpdate = true;
+		removeTouchPad();
+		addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
+		addTouchPadCamera();
 		super.closeSubState();
 	}
 
@@ -380,11 +388,11 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
-		var space = FlxG.keys.justPressed.SPACE;
-		var ctrl = FlxG.keys.justPressed.CONTROL;
+		var space = FlxG.keys.justPressed.SPACE || touchPad.buttonX.justPressed;
+		var ctrl = FlxG.keys.justPressed.CONTROL || touchPad.buttonC.justPressed;
 
 		var shiftMult:Int = 1;
-		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
+		if(FlxG.keys.pressed.SHIFT || touchPad.buttonZ.pressed) shiftMult = 3;
 
 		if(songs.length > 1)
 		{
@@ -430,6 +438,7 @@ class FreeplayState extends MusicBeatState
 
 		if(ctrl)
 		{
+			touchPad.active = touchPad.visible = persistentUpdate = false;
 			openSubState(new substates.GameplayChangersSubstate());
 		}
 		else if(space)
@@ -498,9 +507,10 @@ class FreeplayState extends MusicBeatState
 					
 			destroyFreeplayVocals();
 		}
-		else if(controls.RESET)
+		else if(controls.RESET || touchPad.buttonY.justPressed)
 		{
 			var songName:String = songs[curSelected].songName;
+			touchPad.active = touchPad.visible = persistentUpdate = false;
 			openSubState(new substates.ResetScoreSubState(songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}
