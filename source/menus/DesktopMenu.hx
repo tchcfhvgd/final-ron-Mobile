@@ -485,7 +485,7 @@ class MusicPlayer extends FlxGroup {
 		header.text.antialiasing = false;
 		//header.background.setGraphicSize(244, 16);
 		header.button.offset.x -= 10;
-		dropDown = new FlxUIDropDownMenu(tab.x + 47, tab.y + 135, FlxUIDropDownMenu.makeStrIdLabelArray(sys.FileSystem.readDirectory("assets/songs")), function(song) {
+		dropDown = new FlxUIDropDownMenu(tab.x + 47, tab.y + 135, FlxUIDropDownMenu.makeStrIdLabelArray(Paths.readDirectory("assets/songs")), function(song) {
 			ronmusic.stop();
 			ronmusicvox.stop();
 			ronmusicvox.loadEmbedded(Paths.voices(song));

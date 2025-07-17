@@ -58,7 +58,7 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		for (i in optionButtons) {
 			if (i.ID == curSelected) {i.animation.play("select");
-				if (FlxG.keys.justPressed.ENTER) {
+				if (FlxG.keys.justPressed.ENTER || touchPad.buttonA.justPressed) {
 					var choice = optionArray[i.ID];
 					switch (choice) {
 						case "resume song": close();
