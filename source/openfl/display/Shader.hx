@@ -1,14 +1,14 @@
 package openfl.display;
 
 #if !flash
-import openfl.display3D._internal.GLProgram;
-import openfl.display3D._internal.GLShader;
 import openfl.display._internal.ShaderBuffer;
-import openfl.utils._internal.Float32Array;
-import openfl.utils._internal.Log;
 import openfl.display3D.Context3D;
 import openfl.display3D.Program3D;
+import openfl.display3D._internal.GLProgram;
+import openfl.display3D._internal.GLShader;
 import openfl.utils.ByteArray;
+import openfl.utils._internal.Float32Array;
+import openfl.utils._internal.Log;
 
 /**
 	// TODO: Document GLSL Shaders
@@ -29,60 +29,46 @@ import openfl.utils.ByteArray;
 	pixel whose color is the function result. Shader function calls for
 	multiple output pixel coordinates execute in parallel to improve shader
 	execution performance.
-
 	The shader bytecode can be loaded at run time using a URLLoader instance.
 	The following example demonstrates loading a shader bytecode file at run
 	time and linking it to a Shader instance.
-
 	```as3
 	var loader:URLLoader = new URLLoader();
 	loader.dataFormat = URLLoaderDataFormat.BINARY;
 	loader.addEventListener(Event.COMPLETE, onLoadComplete);
 	loader.load(new URLRequest("myShader.pbj"));
 	var shader:Shader;
-
 	function onLoadComplete(event:Event):void {
 		// Create a new shader and set the loaded data as its bytecode
 		shader = new Shader();
 		shader.byteCode = loader.data;
-
 		// You can also pass the bytecode to the Shader() constructor like this:
 		// shader = new Shader(loader.data);
-
 		// do something with the shader
 	}
 	```
-
 	You can also embed the shader into the SWF at compile time using the
 	`[Embed]` metadata tag. The `[Embed]` metadata tag is only available if
 	you use the Flex SDK to compile the SWF. The `[Embed]` tag's `source`
 	parameter points to the shader file, and its `mimeType` parameter is
 	`"application/octet-stream"`, as in this example:
-
 	```as3
 	[Embed(source="myShader.pbj", mimeType="application/octet-stream)] var MyShaderClass:Class;
-
 	// ...
-
 	// create a new shader and set the embedded shader as its bytecode var
 	shaderShader = new Shader();
 	shader.byteCode = new MyShaderClass();
-
 	// You can also pass the bytecode to the Shader() constructor like this:
 	// var shader:Shader = new Shader(new MyShaderClass());
-
 	// do something with the shader
 	```
-
 	In either case, you link the raw shader (the `URLLoader.data` property or
 	an instance of the `[Embed]` data class) to the Shader instance. As the
 	previous examples demonstrate, you can do this in two ways. You can pass
 	the shader bytecode as an argument to the `Shader()` constructor.
 	Alternatively, you can set it as the Shader instance's `byteCode`
 	property.
-
 	Once a Shader instance is created, it can be used in one of several ways:
-
 	* A shader fill: The output of the shader is used as a fill for content
 	drawn with the drawing API. Pass the Shader instance as an argument to the
 	`Graphics.beginShaderFill()` method.
@@ -96,17 +82,15 @@ import openfl.utils.ByteArray;
 	avoiding the possibility of freezing the display, and dispatches an event
 	when processing is complete. Assign the Shader instance to the `shader`
 	property of a ShaderJob instance.
-
 	Shader fills, filters, and blends are not supported under GPU rendering.
-
 	**Mobile Browser Support:** This feature is not supported in mobile
 	browsers.
-
-	_Adobe AIR profile support:_ This feature is supported on all desktop operating
+	_AIR profile support:_ This feature is supported on all desktop operating
 	systems, but it is not supported on all mobile devices. It is not
-	supported on AIR for TV devices. See
-	[AIR Profile Support](https://help.adobe.com/en_US/air/build/WS144092a96ffef7cc16ddeea2126bb46b82f-8000.html)
-	for more information regarding API support across multiple profiles.
+	supported on AIR for TV devices. See <a
+	href="http://help.adobe.com/en_US/air/build/WS144092a96ffef7cc16ddeea2126bb46b82f-8000.html">
+	AIR Profile Support</a> for more information regarding API support across
+	multiple profiles.
 **/
 #if !openfl_debug
 @:fileXml('tags="haxe,release"')
@@ -142,21 +126,18 @@ class Shader
 
 	/**
 		Get or set the fragment source used when compiling with GLSL.
-
 		This property is not available on the Flash target.
 	**/
 	public var glFragmentSource(get, set):String;
 
 	/**
 		The compiled GLProgram if available.
-
 		This property is not available on the Flash target.
 	**/
 	@SuppressWarnings("checkstyle:Dynamic") public var glProgram(default, null):GLProgram;
 
 	/**
 		Get or set the vertex source used when compiling with GLSL.
-
 		This property is not available on the Flash target.
 	**/
 	public var glVertexSource(get, set):String;
@@ -165,26 +146,21 @@ class Shader
 		The precision of math operations performed by the shader.
 		The set of possible values for the `precisionHint` property is defined
 		by the constants in the ShaderPrecision class.
-
 		The default value is `ShaderPrecision.FULL`. Setting the precision to
 		`ShaderPrecision.FAST` can speed up math operations at the expense of
 		precision.
-
 		Full precision mode (`ShaderPrecision.FULL`) computes all math
 		operations to the full width of the IEEE 32-bit floating standard and
 		provides consistent behavior on all platforms. In this mode, some math
 		operations such as trigonometric and exponential functions can be
 		slow.
-
 		Fast precision mode (`ShaderPrecision.FAST`) is designed for maximum
 		performance but does not work consistently on different platforms and
 		individual CPU configurations. In many cases, this level of precision
 		is sufficient to create graphic effects without visible artifacts.
-
 		The precision mode selection affects the following shader operations.
 		These operations are faster on an Intel processor with the SSE
 		instruction set:
-
 		* `sin(x)`
 		* `cos(x)`
 		* `tan(x)`
@@ -204,7 +180,6 @@ class Shader
 
 	/**
 		The compiled Program3D if available.
-
 		This property is not available on the Flash target.
 	**/
 	public var program:Program3D;
@@ -253,7 +228,6 @@ class Shader
 
 	/**
 		Creates a new Shader instance.
-
 		@param code The raw shader bytecode to link to the Shader.
 	**/
 	public function new(code:ByteArray = null)
@@ -321,40 +295,13 @@ class Shader
 		var shader = gl.createShader(type);
 		gl.shaderSource(shader, source);
 		gl.compileShader(shader);
-		var shaderInfoLog = gl.getShaderInfoLog(shader);
-		var hasInfoLog = shaderInfoLog != null && StringTools.trim(shaderInfoLog) != "";
-		var compileStatus = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
 
-		if (hasInfoLog || compileStatus == 0)
+		if (gl.getShaderParameter(shader, gl.COMPILE_STATUS) == 0)
 		{
-			final startMessage = '${(compileStatus == 0) ? "Error" : "Info" } ${(type == gl.VERTEX_SHADER) ? "compiling vertex shader" : "compiling fragment shader"}';
-			var message = startMessage;
-			message += "\n" + shaderInfoLog;
+			var message = (type == gl.VERTEX_SHADER) ? "Error compiling vertex shader" : "Error compiling fragment shader";
+			message += "\n" + gl.getShaderInfoLog(shader);
 			message += "\n" + source;
-			#if sys
-			if (compileStatus == 0)
-			{
-				try
-				{
-					if (!sys.FileSystem.exists('logs'))
-						sys.FileSystem.createDirectory('logs');
-
-					sys.io.File.saveContent('logs/' + 'ShaderCompileError.txt', '$message');
-				}
-				catch (e:haxe.Exception)
-					Log.warn('Couldn\'t save error message. (${e.message})', null);
-			}
-			#end
-			if (compileStatus == 0)
-				#if (android && !macro)
-				android.Tools.showAlertDialog("Shader Compile Error!", message, {name: "OK", func: null}, null)
-				#elseif !ios
-				openfl.Lib.application.window.alert('$message', 'Shader Compile Error!')
-				#else
-				Log.error(message)
-				#end;
-			else if (hasInfoLog)
-				Log.debug(message);
+			Log.error(message);
 		}
 
 		return shader;
@@ -411,8 +358,6 @@ class Shader
 		{
 			input.__disableGL(__context, textureCount);
 			textureCount++;
-			if (textureCount == gl.MAX_TEXTURE_IMAGE_UNITS)
-				break;
 		}
 
 		for (parameter in __paramBool)
@@ -504,17 +449,16 @@ class Shader
 		{
 			var gl = __context.gl;
 
-			#if (js && html5)
-			var prefix = (precisionHint == FULL ? "precision mediump float;\n" : "precision lowp float;\n");
-			#else
-			var prefix = "#ifdef GL_ES\n"
-				+ (precisionHint == FULL ? "#ifdef GL_FRAGMENT_PRECISION_HIGH\n"
-					+ "precision highp float;\n"
-					+ "#else\n"
-					+ "precision mediump float;\n"
-					+ "#endif\n" : "precision lowp float;\n")
-				+ "#endif\n\n";
-			#end
+			var prefix = "#ifdef GL_ES
+				"
+				+ (precisionHint == FULL ? "#ifdef GL_FRAGMENT_PRECISION_HIGH
+				precision highp float;
+				#else
+				precision mediump float;
+				#endif" : "precision lowp float;")
+				+ "
+				#endif
+				";
 
 			var vertex = prefix + glVertexSource;
 			var fragment = prefix + glFragmentSource;
@@ -633,8 +577,7 @@ class Shader
 				}
 
 				Reflect.setField(__data, name, input);
-				if (__isGenerated)
-					Reflect.setField(this, name, input);
+				//if (__isGenerated) Reflect.setField(this, name, input);
 			}
 			else if (!Reflect.hasField(__data, name) || Reflect.field(__data, name) == null)
 			{
@@ -700,8 +643,7 @@ class Shader
 						}
 
 						Reflect.setField(__data, name, parameter);
-						if (__isGenerated)
-							Reflect.setField(this, name, parameter);
+						//if (__isGenerated) Reflect.setField(this, name, parameter);
 
 					case INT, INT2, INT3, INT4:
 						var parameter = new ShaderParameter<Int>();
@@ -713,8 +655,7 @@ class Shader
 						parameter.__length = length;
 						__paramInt.push(parameter);
 						Reflect.setField(__data, name, parameter);
-						if (__isGenerated)
-							Reflect.setField(this, name, parameter);
+						//if (__isGenerated) Reflect.setField(this, name, parameter);
 
 					default:
 						var parameter = new ShaderParameter<Float>();
@@ -722,8 +663,7 @@ class Shader
 						parameter.type = parameterType;
 						parameter.__arrayLength = arrayLength;
 						#if lime
-						if (arrayLength > 0)
-							parameter.__uniformMatrix = new Float32Array(arrayLength * arrayLength);
+						if (arrayLength > 0) parameter.__uniformMatrix = new Float32Array(arrayLength * arrayLength);
 						#end
 						parameter.__isFloat = true;
 						parameter.__isUniform = isUniform;
@@ -746,8 +686,7 @@ class Shader
 						}
 
 						Reflect.setField(__data, name, parameter);
-						if (__isGenerated)
-							Reflect.setField(this, name, parameter);
+						//if (__isGenerated) Reflect.setField(this, name, parameter);
 				}
 			}
 

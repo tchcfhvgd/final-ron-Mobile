@@ -37,7 +37,6 @@ import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import flixel.input.mouse.FlxMouseButton;
 #end
 import mobile.input.MobileInputID;
-import shaders.flixel.system.FlxShader;
 
 /**
  * A simple button class that calls a function when clicked by the touch.
@@ -180,8 +179,6 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 
 	public var statusIndicatorType(default, set):StatusIndicators = ALPHA;
 
-	public var brightShader:ButtonBrightnessShader = new ButtonBrightnessShader();
-
 	public var justReleased(get, never):Bool;
 	public var released(get, never):Bool;
 	public var pressed(get, never):Bool;
@@ -214,8 +211,8 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	{
 		super(X, Y);
 
-		if (statusIndicatorType == BRIGHTNESS)
-			shader = brightShader;
+		//if (statusIndicatorType == BRIGHTNESS)
+			//shader = brightShader;
 
 		onUp = new TouchButtonEvent();
 		onDown = new TouchButtonEvent();
@@ -388,7 +385,7 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 			case ALPHA:
 				alpha = statusAlphas[status];
 			case BRIGHTNESS:
-				brightShader.brightness.value = [statusBrightness[status]];
+				//brightShader.brightness.value = [statusBrightness[status]];
 			case NONE: // no balls
 		}
 	}
@@ -447,8 +444,8 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 
 		updateLabelPosition();
 
-		if (statusIndicatorType == BRIGHTNESS && label != null && brightShader != null)
-			label.shader = brightShader;
+		//if (statusIndicatorType == BRIGHTNESS && label != null && brightShader != null)
+			//label.shader = brightShader;
 
 		return Value;
 	}
@@ -494,7 +491,7 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	{
 		if (_spriteLabel != null)
 			_spriteLabel.color = Value;
-		brightShader.color = Value;
+		//brightShader.color = Value;
 		super.set_color(Value);
 		return Value;
 	}
@@ -536,9 +533,10 @@ class TypedTouchButton<T:FlxSprite> extends FlxSprite implements IFlxInput
 	{
 		if (Value == BRIGHTNESS)
 		{
-			shader = brightShader;
+			/*shader = brightShader;
 			if (_spriteLabel != null)
 				_spriteLabel.shader = brightShader;
+			*/
 		}
 		else
 		{
@@ -617,42 +615,6 @@ private class TouchButtonEvent implements IFlxDestroyable
 		if (sound != null)
 			sound.play(true);
 		#end
-	}
-}
-
-class ButtonBrightnessShader extends FlxShader
-{
-	public var color(default, set):Null<FlxColor> = FlxColor.WHITE;
-
-	@:glFragmentSource('
-		#pragma header
-
-		uniform float brightness;
-
-		void main()
-		{
-			vec4 col = flixel_texture2D(bitmap, openfl_TextureCoordv);
-			col.rgb *= brightness;
-
-			gl_FragColor = col;
-		}
-	')
-	public function new()
-	{
-		super();
-	}
-
-	private function set_color(?laColor:FlxColor)
-	{
-		if (laColor == null)
-		{
-			colorMultiplier.value = [1, 1, 1, 1];
-			hasColorTransform.value = hasTransform.value = [false];
-			return color = laColor;
-		}
-		hasColorTransform.value = hasTransform.value = [true];
-		colorMultiplier.value = [laColor.redFloat, laColor.blueFloat, laColor.greenFloat, laColor.alphaFloat];
-		return color = laColor;
 	}
 }
 
