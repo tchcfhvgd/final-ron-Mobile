@@ -110,7 +110,6 @@ class DesktopMenu extends MusicBeatState
 							//	FlxG.camera.fade(0x88FFFFFF, 0.6, false);
 							//	new FlxTimer().start(2, function(tmr:FlxTimer){ FlxG.switchState(new StoryMenuState()); FlxG.camera.fade(0x88FFFFFF, 0, true);});
 							//});
-							var video:misc.MP4Handler = new misc.MP4Handler();
 							openSubState(new misc.CustomFadeTransition(.8, false));
 							new FlxTimer().start(.5, function(tmr:FlxTimer)
 							{
@@ -127,7 +126,10 @@ class DesktopMenu extends MusicBeatState
 								PlayState.campaignMisses = 0;
 								CoolUtil.difficulties = ["Hard"];
 								important.WeekData.reloadWeekFiles(true);
-								video.playMP4(Paths.videoRon('ron'), new PlayState(), false, false, false);
+								if(ClientPrefs.cutscenes)
+								startVideo('ron');
+								else
+								menus.LoadingState.loadAndSwitchState(new PlayState());
 							});
 						}
 						else if (icons[i].length != 0)
@@ -492,5 +494,42 @@ class MusicPlayer extends FlxGroup {
 			}
 		}
 		ronmusicvox.volume = voices.toggled ? 1 : 0;
+	}
+	
+	public function startVideo(name:String)
+	{
+		#if VIDEOS_ALLOWED
+		if (FlxG.sound.music != null)
+		{
+			FlxG.sound.music.stop();
+		}
+
+		var filepath:String = Paths.video(name);
+		#if sys
+		if(!FileSystem.exists(filepath))
+		#else
+		if(!OpenFlAssets.exists(filepath))
+		#end
+		{
+			FlxG.log.warn('Couldnt find video file: ' + name);
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}
+
+		var video:FlxVideo = new FlxVideo();
+		video.load(filepath);
+		video.play();
+		video.onEndReached.add(function()
+		{
+			video.dispose();
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}, true);
+
+		#else
+		FlxG.log.warn('Platform not supported!');
+		menus.LoadingState.loadAndSwitchState(new PlayState());
+		return;
+		#end
 	}
 }

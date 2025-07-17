@@ -40,6 +40,7 @@ class Paths
 		'assets/music/freakyMenu.$SOUND_EXT',
 		'assets/music/breakfast.$SOUND_EXT',
 		'assets/music/tea-time.$SOUND_EXT',
+		'assets/mobile/touchpad/bg.png'
 	];
 	/// haya I love you for the base cache dump I took to the max
 	public static function clearUnusedMemory() {
@@ -61,6 +62,11 @@ class Paths
 		}
 		// run the garbage collector for good measure lmfao
 		System.gc();
+		#if cpp
+		cpp.NativeGc.run(true);
+		#elseif hl
+		hl.Gc.major();
+		#end
 	}
 
 	// define the locally tracked assets
@@ -309,5 +315,26 @@ class Paths
 		}
 		localTrackedAssets.push(gottenPath);
 		return currentTrackedSounds.get(gottenPath);
+	}
+	
+	public static function readDirectory(directory:String):Array<String>
+	{
+		#if MODS_ALLOWED
+		return FileSystem.readDirectory(directory);
+		#else
+		var dirs:Array<String> = [];
+		for (dir in Assets.list().filter(folder -> folder.startsWith(directory)))
+		{
+			@:privateAccess
+			for (library in lime.utils.Assets.libraries.keys())
+			{
+				if (library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
+					dirs.push('$library:$dir');
+				else if (Assets.exists(dir) && !dirs.contains(dir))
+					dirs.push(dir);
+			}
+		}
+		return dirs.map(dir -> dir.substr(dir.lastIndexOf("/") + 1));
+		#end
 	}
 }

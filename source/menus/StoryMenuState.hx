@@ -50,7 +50,6 @@ class StoryMenuState extends MusicBeatState
 
 	var loadedWeeks:Array<WeekData> = [];
 
-	public var video:misc.MP4Handler = new misc.MP4Handler();
 
 	public static var musicTime:Float;
 
@@ -335,12 +334,18 @@ class StoryMenuState extends MusicBeatState
 				case 0:
 					new FlxTimer().start(1, function(tmr:FlxTimer)
 					{
-						video.playMP4(Paths.videoRon('ron'), new PlayState(), false, false, false);
+						if(ClientPrefs.cutscenes)
+						startVideo('ron');
+						else
+						menus.LoadingState.loadAndSwitchState(new PlayState());
 					});
 				case 2:
 					new FlxTimer().start(1, function(tmr:FlxTimer)
 					{
-						video.playMP4(Paths.videoRon('trojanvirus'), new PlayState(), false, false, false);
+						if(ClientPrefs.cutscenes)
+						startVideo('trojan-virus');
+						else
+						menus.LoadingState.loadAndSwitchState(new PlayState());
 					});
 				default:
 					new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -503,6 +508,43 @@ class StoryMenuState extends MusicBeatState
 
 		#if !switch
 		intendedScore = important.Highscore.getWeekScore(loadedWeeks[curWeek].fileName, curDifficulty);
+		#end
+	}
+	
+	public function startVideo(name:String)
+	{
+		#if VIDEOS_ALLOWED
+		if (FlxG.sound.music != null)
+		{
+			FlxG.sound.music.stop();
+		}
+
+		var filepath:String = Paths.video(name);
+		#if sys
+		if(!FileSystem.exists(filepath))
+		#else
+		if(!OpenFlAssets.exists(filepath))
+		#end
+		{
+			FlxG.log.warn('Couldnt find video file: ' + name);
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}
+
+		var video:FlxVideo = new FlxVideo();
+		video.load(filepath);
+		video.play();
+		video.onEndReached.add(function()
+		{
+			video.dispose();
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}, true);
+
+		#else
+		FlxG.log.warn('Platform not supported!');
+		menus.LoadingState.loadAndSwitchState(new PlayState());
+		return;
 		#end
 	}
 }

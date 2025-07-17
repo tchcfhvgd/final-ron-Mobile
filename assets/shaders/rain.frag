@@ -23,9 +23,9 @@ void main()
     // Time varying pixel color
     vec4 col = texture2D(bitmap, uv);
     //col = vec3(rain(vec3(-uv,5)));
-    col += rain(vec3(-uv*2.3,5)) * 0.5;
-    col += rain(vec3(-uv*4.7,5)) * 0.25;
-    col += rain(vec3(-uv*4.7,5)) * 0.05;
+    col += rain(vec3(-uv*2.3,5.0)) * 0.5;
+    col += rain(vec3(-uv*4.7,5.0)) * 0.25;
+    col += rain(vec3(-uv*4.7,5.0)) * 0.05;
     // Output to screen
     gl_FragColor = col;
 }

@@ -40,6 +40,7 @@ class NoticeScreen extends MusicBeatState
 	{
 		super.create();
 		important.PlayerSettings.init();
+		mobile.MobileData.init();
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 		ClientPrefs.loadPrefs();
 	

@@ -8,5 +8,5 @@ void main()
     // Time varying pixel color
     
     // Output to screen
-    gl_FragColor = texture(bitmap,uv);
+    gl_FragColor = texture2D(bitmap,uv);
 }

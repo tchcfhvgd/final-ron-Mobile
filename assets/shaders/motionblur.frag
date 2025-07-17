@@ -1,5 +1,5 @@
 #define PI 3.14159265359
-#define rot(a) mat2(cos(a + PI*0.5*vec4(0,1,3,0)))
+#define rot(a) mat2(cos(a + PI*0.5*vec4(0.0,1.0,3.0,0.0)))
 
 float hash13(vec3 p3) 
 {
@@ -21,13 +21,13 @@ vec3 scene(vec2 fragCoord, float time)
 
 void main() 
 {
-	vec3 result = vec3(0);
+	vec3 result = vec3(0.0);
 			
 	bool motionBlur = true; // change this
 	if ( motionBlur ) {
-		#define BLUR 30
-		for (int i = 0 ; i < BLUR ; i++) {
-			float rnd = hash13(vec3(openfl_TextureCoordv*openfl_TextureSize.xy, iFrame*100+i));
+		#define BLUR 30.0
+		for (float i = 0.0 ; i < BLUR ; i++) {
+			float rnd = hash13(vec3(openfl_TextureCoordv*openfl_TextureSize.xy, iFrame*100.0+i));
 			float time = iTime + rnd / 60.0;
 			result += scene(openfl_TextureCoordv*openfl_TextureSize.xy, time);
 		}
