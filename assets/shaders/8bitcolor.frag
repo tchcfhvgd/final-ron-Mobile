@@ -1,4 +1,4 @@
-#define color_bits vec3( 2., 2., 2. )
+#define color_bits vec3( 2, 2, 2 )
 #define color_values exp2( color_bits )
 #define color_rvalues (1. / color_values)
 #define color_maxValues (color_values - 1.)
@@ -22,9 +22,9 @@ vec3 decodeColor(float a){
 void main(){
 	vec2 uv = openfl_TextureCoordv;
 	if (enablethisbitch == 1.) {
-		gl_FragColor = texture2D(bitmap,uv);
+		gl_FragColor = flixel_texture2D(bitmap,uv);
 		gl_FragColor.r = encodeColor(texture2D(bitmap,uv).rgb);
 		gl_FragColor.rgb = decodeColor(gl_FragColor.r);
 	}
-	else gl_FragColor = texture2D(bitmap,uv);
+	else gl_FragColor = flixel_texture2D(bitmap,uv);
 }
