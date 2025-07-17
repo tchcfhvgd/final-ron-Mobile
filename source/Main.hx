@@ -117,6 +117,10 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		#if (mobile && !MODS_ALLOWED)
+		Storage.copyNecessaryFiles();
+		#end
+		
 		var data = new haxe.Http("https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/buildnumber.txt");
 		data.onData = function(d) trace(d);
 	
