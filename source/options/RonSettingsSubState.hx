@@ -36,12 +36,6 @@ class RonSettingsSubState extends BaseOptionsMenu
 		'bool', //Variable type
 		true); //Default value
 		addOption(option);
-		var option:Option = new Option('Chromatic abberation', //Name
-		'If checked, adds slight chromatic abberation to each song.', //Description
-		'chromaticAbberationEverywhere', //Save data variable name
-		'bool', //Variable type
-		false); //Default value
-		addOption(option);
 		var option:Option = new Option('Cutscenes', //Name
 		'If checked, shows you cutscenes on some songs.', //Description
 		'cutscenes', //Save data variable name

@@ -190,7 +190,7 @@ class MasterFreeplayState extends MusicBeatState
 			accepted = true;
 			MusicBeatState.switchState(new menus.DesktopMenu());
 		}
-
+        super.update(elapsed);
 	}
 	function changeSelection(p)
 	{
