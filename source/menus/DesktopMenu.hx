@@ -197,6 +197,43 @@ class DesktopMenu extends MusicBeatState
 		FlxG.mouse.visible = true;
 		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.R) add(new RunTab());
 	}
+	
+	public function startVideo(name:String)
+	{
+		#if VIDEOS_ALLOWED
+		if (FlxG.sound.music != null)
+		{
+			FlxG.sound.music.stop();
+		}
+
+		var filepath:String = Paths.video(name);
+		#if sys
+		if(!FileSystem.exists(filepath))
+		#else
+		if(!OpenFlAssets.exists(filepath))
+		#end
+		{
+			FlxG.log.warn('Couldnt find video file: ' + name);
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}
+
+		var video:FlxVideo = new FlxVideo();
+		video.load(filepath);
+		video.play();
+		video.onEndReached.add(function()
+		{
+			video.dispose();
+			menus.LoadingState.loadAndSwitchState(new PlayState());
+			return;
+		}, true);
+
+		#else
+		FlxG.log.warn('Platform not supported!');
+		menus.LoadingState.loadAndSwitchState(new PlayState());
+		return;
+		#end
+	}
 }
 class RunTab extends FlxGroup {
 	var tab:FlxSprite;
@@ -494,42 +531,5 @@ class MusicPlayer extends FlxGroup {
 			}
 		}
 		ronmusicvox.volume = voices.toggled ? 1 : 0;
-	}
-	
-	public function startVideo(name:String)
-	{
-		#if VIDEOS_ALLOWED
-		if (FlxG.sound.music != null)
-		{
-			FlxG.sound.music.stop();
-		}
-
-		var filepath:String = Paths.video(name);
-		#if sys
-		if(!FileSystem.exists(filepath))
-		#else
-		if(!OpenFlAssets.exists(filepath))
-		#end
-		{
-			FlxG.log.warn('Couldnt find video file: ' + name);
-			menus.LoadingState.loadAndSwitchState(new PlayState());
-			return;
-		}
-
-		var video:FlxVideo = new FlxVideo();
-		video.load(filepath);
-		video.play();
-		video.onEndReached.add(function()
-		{
-			video.dispose();
-			menus.LoadingState.loadAndSwitchState(new PlayState());
-			return;
-		}, true);
-
-		#else
-		FlxG.log.warn('Platform not supported!');
-		menus.LoadingState.loadAndSwitchState(new PlayState());
-		return;
-		#end
 	}
 }
