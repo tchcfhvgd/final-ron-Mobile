@@ -2354,7 +2354,7 @@ class PlayState extends MusicBeatState
 		#end
 		{
 			FlxG.log.warn('Couldnt find video file: ' + name);
-			startAndEnd();
+			menus.LoadingState.loadAndSwitchState(new PlayState());
 			return;
 		}
 
@@ -2364,13 +2364,13 @@ class PlayState extends MusicBeatState
 		video.onEndReached.add(function()
 		{
 			video.dispose();
-			startAndEnd();
+			menus.LoadingState.loadAndSwitchState(new PlayState());
 			return;
 		}, true);
 
 		#else
 		FlxG.log.warn('Platform not supported!');
-		startAndEnd();
+	    menus.LoadingState.loadAndSwitchState(new PlayState());
 		return;
 		#end
 	}
